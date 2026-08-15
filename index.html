@@ -381,6 +381,44 @@ code{font-family:var(--mono);background:rgba(255,255,255,.09);padding:2px 6px;
 
 
 
+
+/* ═══════════════ SIGN-IN GATE ═══════════════ */
+#gate{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(1000px 620px at 50% -10%,#12121a 0%,#040405 62%);
+  animation:up .5s var(--ease) both}
+#gate.gone{opacity:0;pointer-events:none;transform:scale(1.02);transition:.45s var(--ease)}
+.gate-card{width:100%;max-width:404px;text-align:center;padding:36px 30px 26px;
+  border-radius:22px;background:rgba(255,255,255,.035);border:1px solid var(--line);
+  backdrop-filter:blur(18px);box-shadow:0 34px 90px -34px #000;position:relative;overflow:hidden}
+.gate-card::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.gate-mark{width:56px;height:56px;margin:0 auto 15px;border-radius:16px;
+  background:linear-gradient(145deg,#fff,#c9c9d4);color:#000;display:grid;place-items:center;
+  font-weight:900;font-size:22px;letter-spacing:-.05em;
+  box-shadow:0 12px 34px -10px rgba(255,255,255,.45);animation:float 5.5s ease-in-out infinite}
+.gate-h{font-size:23px;font-weight:800;margin:0;letter-spacing:-.02em}
+.gate-p{font-size:12.5px;color:var(--muted);margin:3px 0 20px;letter-spacing:.06em;text-transform:uppercase}
+.gate-lead{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 18px}
+.gate-btn{width:100%;height:46px;border-radius:12px;border:none;background:#5865f2;color:#fff;
+  font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  transition:.2s var(--ease);box-shadow:0 12px 30px -12px rgba(88,101,242,.9)}
+.gate-btn:hover:not(:disabled){background:#4752c4;transform:translateY(-2px)}
+.gate-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.gate-skip{width:100%;margin-top:11px;background:none;border:none;color:var(--dim);
+  font-size:12px;padding:7px;transition:.18s}
+.gate-skip:hover{color:var(--muted);text-decoration:underline}
+.gate-in{width:100%;background:rgba(0,0,0,.5);color:var(--fg);border:1px solid var(--line);
+  border-radius:12px;padding:12px 14px;font:inherit;font-size:13.5px;outline:none;
+  text-align:center;transition:.2s}
+.gate-in:focus{border-color:#5865f2;box-shadow:0 0 0 4px rgba(88,101,242,.16)}
+.gate-who{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;
+  background:rgba(88,101,242,.14);border:1px solid rgba(88,101,242,.35)}
+.gate-who img{width:42px;height:42px;border-radius:50%;flex:none;background:#1a1a20}
+.gate-name{font-weight:700;font-size:14.5px}
+.gate-id{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:2px}
+.gate-err{color:var(--bad);font-size:12px;margin:11px 0 0;min-height:16px}
+.gate-foot{font-size:11px;color:var(--dim);margin:20px 0 0}
+
 /* ═══════════════ AUTH & INVITE ═══════════════ */
 .oa-user{display:flex;align-items:center;gap:13px;padding:13px;border-radius:12px;margin-bottom:14px;
   background:linear-gradient(120deg,rgba(88,101,242,.16),rgba(88,101,242,.04));
@@ -546,6 +584,7 @@ code{font-family:var(--mono);background:rgba(255,255,255,.09);padding:2px 6px;
 .efld-h button:hover{color:var(--dh-rose);background:#fb718522}
 .dh-total{font-size:11.5px;color:var(--dh-mut);text-align:right;margin:9px 0 0;font-family:var(--mono)}
 .dh-total.over{color:var(--dh-rose);font-weight:700}
+.warnTxt{color:var(--warn)!important;font-style:normal!important;font-weight:600}
 
 /* ═══════════════ DISCOHOOK-STYLE MESSAGE EDITOR ═══════════════ */
 /* palette lifted from Discohook: #292b2f card, #1E1F22 borders,
@@ -666,6 +705,44 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
 </defs></svg>
 <div id="toasts"></div>
 
+
+<!-- ═══════════ SIGN-IN GATE ═══════════ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-mark">OG</div>
+    <h1 class="gate-h">OracleGames</h1>
+    <p class="gate-p">Bot Control Panel</p>
+
+    <div id="gateStep1">
+      <p class="gate-lead">Sign in with Discord to continue. We only read your profile and
+        server list &mdash; nothing is posted on your behalf.</p>
+      <button class="gate-btn" id="gateLogin">
+        <svg viewBox="0 0 24 24" width="19" height="19" style="margin-right:9px"><path fill="currentColor"
+          d="M20.3 4.6A19 19 0 0 0 15.6 3l-.3.5a17 17 0 0 1 4.2 1.4 15 15 0 0 0-13-.1A17 17 0 0 1 10.7 3.5L10.4 3a19 19 0 0 0-4.7 1.6C2.7 9.1 1.9 13.5 2.3 17.8a19 19 0 0 0 5.8 3l1.2-1.7c-.6-.2-1.3-.5-1.9-.9l.5-.3a13 13 0 0 0 11.2 0l.5.3c-.6.4-1.2.7-1.9.9l1.2 1.7a19 19 0 0 0 5.8-3c.5-5-.8-9.3-4.4-13.2zM8.9 15.3c-1.1 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3zm6.2 0c-1.1 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3z"/></svg>
+        Sign in with Discord
+      </button>
+      <button class="gate-skip" id="gateSkip">Skip &mdash; I only have a bot token</button>
+    </div>
+
+    <div id="gateStep2" class="hidden">
+      <div class="gate-who">
+        <img id="gateAv" alt=""><div style="min-width:0;text-align:left">
+          <div class="gate-name" id="gateName">—</div>
+          <div class="gate-id" id="gateId">—</div></div>
+      </div>
+      <p class="gate-lead" style="margin-top:16px">Now paste your <b>bot token</b>. It is saved
+        in this browser only and sent straight to Discord.</p>
+      <input type="password" id="gateToken" class="gate-in" placeholder="Bot token" autocomplete="off" spellcheck="false">
+      <label class="chk" style="justify-content:center;margin:11px 0 0">
+        <input type="checkbox" id="gateRemember" checked> Remember and auto-connect next time</label>
+      <button class="gate-btn" id="gateGo" style="margin-top:15px">Connect and go online</button>
+      <p class="gate-err" id="gateErr"></p>
+    </div>
+
+    <p class="gate-foot">Runs entirely in your browser &middot; no server, no secret</p>
+  </div>
+</div>
+
 <div class="wrap">
   <header class="rise">
     <div class="mark">OG</div>
@@ -704,6 +781,8 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
         <input type="password" id="token" placeholder="MTEx…….your bot token" autocomplete="off" spellcheck="false">
       </div>
       <label class="chk"><input type="checkbox" id="remember" checked> Remember token in this browser</label>
+      <label class="chk" style="margin-top:9px"><input type="checkbox" id="autoOnline" checked>
+        Bring the bot online automatically after connecting</label>
       <div class="actions">
         <button class="btn" id="btnConnect">Connect</button>
         <button class="btn ghost" id="btnShow">Show</button>
@@ -1092,13 +1171,23 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
       <div class="dh-head" style="margin-top:22px">
         <span class="dh-title">Target</span>
       </div>
+      <div class="row" style="gap:9px;margin-bottom:11px">
+        <div class="field" style="margin:0">
+          <label class="dh-fl" for="sendGuild">Server</label>
+          <select id="sendGuild" class="dh-sel"><option value="">connect first</option></select>
+        </div>
+        <div class="field" style="margin:0">
+          <label class="dh-fl" for="sendChannel">Channel</label>
+          <select id="sendChannel" class="dh-sel"><option value="">connect first</option></select>
+        </div>
+      </div>
       <div class="dh-target" id="dhTarget">
         <div class="dh-hookav">
           <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm0 13a7.5 7.5 0 0 1-5.6-2.5c.1-2 4-3.1 5.6-3.1s5.5 1.1 5.6 3.1A7.5 7.5 0 0 1 12 19.5z"/></svg>
         </div>
         <div style="min-width:0;flex:1">
           <div class="dh-hookname" id="dhBotName">Not connected</div>
-          <div class="dh-hookch" id="sendTo">select a channel on the Connect tab</div>
+          <div class="dh-hookch" id="sendTo">pick a channel above</div>
         </div>
         <span class="dh-check" id="dhCheck"><svg class="ic" style="width:11px;height:11px"><use href="#i-dot"/></svg></span>
       </div>
@@ -1162,7 +1251,7 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
 
     <div class="card">
       <h2>Register a Single Command</h2>
-      <p class="hint">Global commands can take up to an hour to appear. Registering to a single server is instant — pick a server on the Connect tab.</p>
+      <p class="hint">Global commands can take up to an hour to appear. Registering to a single server is instant. The server is picked automatically after you connect.</p>
       <div class="row">
         <div class="field">
           <label for="cmdName">Name</label>
@@ -1184,6 +1273,7 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
         <button class="btn" id="btnAddCmd">Register</button>
         <button class="btn ghost" id="btnLoadCmds">Refresh list</button>
         <button class="btn danger" id="btnWipe">Delete all in scope</button>
+        <span class="dh-opt" id="scopeNow">—</span>
       </div>
     </div>
 
@@ -1193,11 +1283,12 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
       <div class="cmds" id="cmdList"><div class="empty">Nothing loaded yet.</div></div>
     </div>
 
-    <div class="warn">
-      <b>Commands appear but won't reply yet.</b> Registering creates them in Discord's
-      UI; answering them needs an <b>Interactions Endpoint URL</b> or a gateway bot —
-      the authentication piece you're adding later. The permission locks below <i>do</i>
-      work immediately: Discord hides <code>/ban</code> and friends from non-staff on its own.
+    <div class="note">
+      <b>These reply for real while the bot is online.</b> The Control tab answers slash
+      commands over the gateway, so <code>/ping</code>, <code>/status</code>, <code>/help</code> and the
+      other wired commands respond immediately &mdash; no hosting needed. Moderation commands
+      like <code>/ban</code> register and stay staff-only, but performing the action still needs a
+      hosted bot. Keep this tab open for the bot to stay online.
     </div>
   </section>
 
@@ -1318,6 +1409,11 @@ async function connect() {
     log(`Connected as ${me.username} (${me.id})`, "ok");
     if ($("remember").checked) localStorage.setItem(KEY, token);
     await loadGuilds();
+    if ($("autoOnline").checked && !wantOnline) {   // actually bring it online
+      log("Starting the gateway…", "in");
+      wantOnline = true; events = 0; $("vEvents").textContent = 0;
+      $("feed").innerHTML = ""; gatewayOpen(false);
+    }
   } catch (e) {
     $("hdrDot").className = "dot err";
     $("hdrTxt").textContent = "Connection failed";
@@ -1335,33 +1431,73 @@ async function loadGuilds() {
     sel.innerHTML = gs.length ? '<option value="">— select —</option>'
                               : '<option value="">no servers — invite the bot first</option>';
     gs.forEach(g => sel.add(new Option(g.name, g.id)));
-    log(`Loaded ${gs.length} server(s)`, "ok", true);
+    // mirror into the Send tab picker
+    const s2 = $("sendGuild");
+    s2.innerHTML = sel.innerHTML;
+    if (gs.length) {                       // auto-pick the first server
+      sel.value = gs[0].id; s2.value = gs[0].id;
+      await loadChannels(gs[0].id);
+      log(`Loaded ${gs.length} server(s) — using "${gs[0].name}"`, "ok", true);
+    } else {
+      log("Bot is not in any server yet — use Auth & Invite to add it.", "wn");
+    }
+    syncScopeHint();
   } catch (e) { log("Load servers failed: " + e.message, "er"); }
 }
 
-$("guild").onchange = async e => {
-  const gid = e.target.value, sel = $("channel");
-  sel.innerHTML = '<option value="">loading…</option>';
-  if (!gid) { sel.innerHTML = '<option value="">— select a server first —</option>'; return; }
+/* one loader used by BOTH pickers, keeps them in sync */
+async function loadChannels(gid) {
+  const sels = [$("channel"), $("sendChannel")];
+  sels.forEach(s => s.innerHTML = '<option value="">loading…</option>');
+  if (!gid) { sels.forEach(s => s.innerHTML = '<option value="">— pick a server —</option>');
+              updateTarget(); return; }
   try {
     const chs = await api(`/guilds/${gid}/channels`);
-    const text = chs.filter(c => c.type === 0 || c.type === 5).sort((a,b) => a.position - b.position);
-    sel.innerHTML = text.length ? '<option value="">— select —</option>'
-                                : '<option value="">no readable text channels</option>';
-    text.forEach(c => sel.add(new Option("#" + c.name, c.id)));
+    const cats = {};
+    chs.filter(c => c.type === 4).forEach(c => cats[c.id] = c.name);
+    const text = chs.filter(c => [0, 5].includes(c.type))
+                    .sort((a, b) => (a.position || 0) - (b.position || 0));
+    if (!text.length) {
+      sels.forEach(s => s.innerHTML = '<option value="">no text channels visible to the bot</option>');
+      log("No text channels visible — check the bot's View Channel permission.", "wn");
+      updateTarget(); return;
+    }
+    // group under their category, like Discord shows them
+    const groups = {};
+    text.forEach(c => { const k = cats[c.parent_id] || "No category";
+                        (groups[k] = groups[k] || []).push(c); });
+    const html = ['<option value="">— select a channel —</option>'];
+    Object.entries(groups).forEach(([cat, list]) => {
+      html.push(`<optgroup label="${cat.replace(/[<>&"]/g, "")}">`);
+      list.forEach(c => html.push(`<option value="${c.id}">#${c.name.replace(/[<>&"]/g, "")}</option>`));
+      html.push("</optgroup>");
+    });
+    sels.forEach(s => s.innerHTML = html.join(""));
     log(`Loaded ${text.length} channel(s)`, "ok", true);
   } catch (err) {
-    sel.innerHTML = '<option value="">failed to load</option>';
+    sels.forEach(s => s.innerHTML = '<option value="">failed to load</option>');
     log("Load channels failed: " + err.message, "er");
   }
   updateTarget();
+}
+
+/* keep the two server pickers mirrored */
+$("guild").onchange = async e => {
+  $("sendGuild").value = e.target.value;
+  await loadChannels(e.target.value); syncScopeHint();
 };
+$("sendGuild").onchange = async e => {
+  $("guild").value = e.target.value;
+  await loadChannels(e.target.value); syncScopeHint();
+};
+$("sendChannel").onchange = e => { $("channel").value = e.target.value; updateTarget(); };
 $("channel").onchange = updateTarget;
 function updateTarget() {
   const c = $("channel"), g = $("guild"), ready = !!c.value;
+  if ($("sendChannel").value !== c.value) $("sendChannel").value = c.value;
   $("sendTo").textContent = ready
     ? `${c.options[c.selectedIndex].text} · ${g.options[g.selectedIndex].text}`
-    : "select a channel on the Connect tab";
+    : "pick a channel above";
   $("dhBotName").textContent = me ? me.username : "Not connected";
   $("dhTarget").classList.toggle("ready", ready);
   renderPreview();
@@ -1810,10 +1946,22 @@ const cmdBase = () => {
   const appId = app?.id || me?.id;
   if (!appId) return null;
   const gid = $("guild").value;
-  return ($("cmdScope").value === "guild" && gid)
-    ? `/applications/${appId}/guilds/${gid}/commands`
-    : `/applications/${appId}/commands`;
+  if ($("cmdScope").value === "guild") {
+    if (!gid) return null;                     // never silently go global
+    return `/applications/${appId}/guilds/${gid}/commands`;
+  }
+  return `/applications/${appId}/commands`;
 };
+function syncScopeHint() {
+  const gid = $("guild").value;
+  const gname = gid ? $("guild").options[$("guild").selectedIndex].text : null;
+  const el = $("scopeNow");
+  if (!el) return;
+  el.textContent = $("cmdScope").value === "guild"
+    ? (gname ? `installing to ${gname} — appears instantly` : "pick a server first")
+    : "installing globally — can take up to 1 hour to appear";
+  el.className = "dh-opt" + ($("cmdScope").value === "guild" && !gid ? " warnTxt" : "");
+}
 function renderCmds(list) {
   const box = $("cmdList");
   if (!list || !list.length) { box.innerHTML = '<div class="empty">No commands registered in this scope.</div>'; return; }
@@ -1842,7 +1990,7 @@ function renderCmds(list) {
 }
 async function loadCmds() {
   const base = cmdBase();
-  if (!base) { log("Connect first.", "er"); return; }
+  if (!base) { log("Pick a server on the Connect tab (or switch scope to Global).", "er"); return; }
   const guildScope = $("cmdScope").value === "guild" && $("guild").value;
   $("cmdScopeLabel").textContent = guildScope
     ? "Scope: " + $("guild").options[$("guild").selectedIndex].text
@@ -1856,7 +2004,7 @@ async function addCmd(name, desc, quiet) {
   if (!/^[\w-]{1,32}$/.test(name)) { log(`Bad name "${name}" — 1-32 chars, letters/numbers/-/_ only.`, "er"); return false; }
   if (!desc) { log("Description required.", "er"); return false; }
   const base = cmdBase();
-  if (!base) { log("Connect first.", "er"); return false; }
+  if (!base) { log("Pick a server on the Connect tab (or switch scope to Global).", "er"); return false; }
   if ($("cmdScope").value === "guild" && !$("guild").value) { log("Pick a server, or switch scope to global.", "er"); return false; }
   try { await api(base, { method:"POST", body: JSON.stringify({ name, description: desc, type: 1 }) });
         if (!quiet) log(`Registered /${name}`, "ok"); return true; }
@@ -2027,7 +2175,7 @@ $("btnSelNone").onclick = () => { selected.clear(); drawPacks(); };
 /* bulk PUT — one request, replaces everything in scope */
 $("btnInstallSel").onclick = async () => {
   const base = cmdBase();
-  if (!base) { log("Connect first.", "er"); return; }
+  if (!base) { log("Pick a server on the Connect tab (or switch scope to Global).", "er"); return; }
   if ($("cmdScope").value === "guild" && !$("guild").value) {
     log("Pick a server on the Connect tab, or switch scope to global.", "er"); return; }
   const cmds = PACKS.filter(p => selected.has(p.id)).flatMap(p => p.cmds)
@@ -2047,7 +2195,7 @@ $("btnInstallSel").onclick = async () => {
 
 $("btnWipe").onclick = async () => {
   const base = cmdBase();
-  if (!base) { log("Connect first.", "er"); return; }
+  if (!base) { log("Pick a server on the Connect tab (or switch scope to Global).", "er"); return; }
   if (!confirm("Delete EVERY command in this scope?")) return;
   busy($("btnWipe"), true, "Deleting…");
   try { await api(base, { method: "PUT", body: "[]" });
@@ -2057,7 +2205,7 @@ $("btnWipe").onclick = async () => {
 };
 
 $("btnLoadCmds").onclick = loadCmds;
-$("cmdScope").onchange = loadCmds;
+$("cmdScope").onchange = () => { syncScopeHint(); loadCmds(); };
 $("btnClearLog").onclick = () => { $("log").innerHTML = ""; };
 
 
@@ -2599,6 +2747,7 @@ async function loadOaUser() {
     $("oaUser").classList.remove("hidden");
     $("oaState").textContent = "Signed in as " + oaUser.username;
     loadOaGuilds();
+    if ($("gate") && $("gate").style.display !== "none") gateToStep2();
   } catch (e) {
     oaToken = null; localStorage.removeItem(OA_KEY);
     $("oaState").textContent = "Session expired — sign in again";
@@ -2705,14 +2854,73 @@ $("oaRedirect").oninput = saveCfg;
   completeOauth();
 })();
 
+
+/* ═══════════════════════════════════════════════════════════
+   SIGN-IN GATE — Discord login, then bot token, then auto-connect
+   ═══════════════════════════════════════════════════════════ */
+function closeGate() {
+  const g = $("gate");
+  g.classList.add("gone");
+  setTimeout(() => g.style.display = "none", 460);
+}
+function gateToStep2() {
+  $("gateStep1").classList.add("hidden");
+  $("gateStep2").classList.remove("hidden");
+  if (oaUser) {
+    $("gateAv").src = oaUser.avatar
+      ? `https://cdn.discordapp.com/avatars/${oaUser.id}/${oaUser.avatar}.png?size=96`
+      : "https://cdn.discordapp.com/embed/avatars/0.png";
+    $("gateName").textContent = oaUser.global_name || oaUser.username;
+    $("gateId").textContent = "ID " + oaUser.id;
+  }
+  const saved = localStorage.getItem(KEY);
+  if (saved) $("gateToken").value = saved;
+  setTimeout(() => $("gateToken").focus(), 80);
+}
+
+$("gateLogin").onclick = () => $("btnOauth").click();
+$("gateSkip").onclick = () => gateToStep2();
+$("gateToken").addEventListener("keydown", e => { if (e.key === "Enter") $("gateGo").click(); });
+
+$("gateGo").onclick = async () => {
+  const t = $("gateToken").value.trim();
+  $("gateErr").textContent = "";
+  if (!t) { $("gateErr").textContent = "Paste your bot token first."; return; }
+  const btn = $("gateGo");
+  btn.disabled = true; btn.textContent = "Connecting…";
+  // hand off to the main connect routine
+  $("token").value = t;
+  $("remember").checked = $("gateRemember").checked;
+  $("autoOnline").checked = true;
+  await connect();
+  if (me) { closeGate(); }
+  else { $("gateErr").textContent = "That token was rejected — check it and try again."; }
+  btn.disabled = false; btn.textContent = "Connect and go online";
+};
+
+/* decide what the gate shows on load */
+function bootGate() {
+  const savedTok = localStorage.getItem(KEY);
+  if (oaToken || oaUser) {            // came back from Discord login
+    gateToStep2();
+    if (savedTok) {                   // fully returning user -> just go
+      $("gateToken").value = savedTok;
+      setTimeout(() => $("gateGo").click(), 350);
+    }
+  } else if (savedTok) {              // token-only returning user
+    gateToStep2();
+    setTimeout(() => $("gateGo").click(), 350);
+  }
+}
 /* ---------- boot ---------- */
 requestAnimationFrame(() => moveGlider(document.querySelector(".tab.active")));
 const saved = localStorage.getItem(KEY);
-if (saved) { $("token").value = saved; log("Saved token found — click Connect.", "wn", true); }
-else { log("Paste your bot token to begin.", "in"); }
+if (saved) { $("token").value = saved; log("Saved token found.", "in", true); }
+else { log("Sign in to begin.", "in"); }
+bootGate();
 drawFields(); syncMode(); drawPacks(); drawResponders(); drawSpark(); drawThreads(); drawThread();
 document.querySelector('.pres[data-st="online"]').classList.add("on"); applyPresence(); updateTarget(); setLocked(true);
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b6189ec9e30b1c',t:'MTc4Njc3NDg1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b62a9fe8e99894',t:'MTc4Njc3NTU5Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
