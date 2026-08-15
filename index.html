@@ -585,6 +585,9 @@ code{font-family:var(--mono);background:rgba(255,255,255,.09);padding:2px 6px;
 .dh-total{font-size:11.5px;color:var(--dh-mut);text-align:right;margin:9px 0 0;font-family:var(--mono)}
 .dh-total.over{color:var(--dh-rose);font-weight:700}
 .warnTxt{color:var(--warn)!important;font-style:normal!important;font-weight:600}
+.mini-rl{background:none;border:none;color:var(--dh-mut);cursor:pointer;padding:2px;
+  border-radius:4px;line-height:0;transition:.15s;margin-left:auto}
+.mini-rl:hover{color:var(--fg);background:#ffffff14}
 
 /* ═══════════════ DISCOHOOK-STYLE MESSAGE EDITOR ═══════════════ */
 /* palette lifted from Discohook: #292b2f card, #1E1F22 borders,
@@ -923,6 +926,14 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
       </div>
     </div>
 
+    <div class="warn" style="margin-bottom:16px">
+      <b>The bot is only online while this tab stays open.</b> Close it, sleep the
+      machine, or switch away for too long and Discord marks the bot offline within
+      about 45 seconds &mdash; that is how the gateway works, not a bug.
+      For a bot that is <b>always</b> online, deploy the <code>oraclegames-bot</code>
+      folder to Railway or Render; it is the same commands running on a real host.
+    </div>
+
     <!-- presence -->
     <div class="card">
       <h2>Presence</h2>
@@ -1177,7 +1188,10 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
           <select id="sendGuild" class="dh-sel"><option value="">connect first</option></select>
         </div>
         <div class="field" style="margin:0">
-          <label class="dh-fl" for="sendChannel">Channel</label>
+          <label class="dh-fl" for="sendChannel">Channel
+            <button type="button" id="btnReloadCh" class="mini-rl" title="Reload channels">
+              <svg class="ic" style="width:11px;height:11px"><use href="#i-refresh"/></svg></button>
+          </label>
           <select id="sendChannel" class="dh-sel"><option value="">connect first</option></select>
         </div>
       </div>
@@ -1458,8 +1472,9 @@ async function loadChannels(gid) {
     const text = chs.filter(c => [0, 5].includes(c.type))
                     .sort((a, b) => (a.position || 0) - (b.position || 0));
     if (!text.length) {
-      sels.forEach(s => s.innerHTML = '<option value="">no text channels visible to the bot</option>');
-      log("No text channels visible — check the bot's View Channel permission.", "wn");
+      sels.forEach(s => s.innerHTML = '<option value="">no channels — see Activity tab</option>');
+      log(`Server returned ${chs.length} channel(s) but none are text channels the bot can see.`, "er");
+      log("Fix: Server Settings > Roles > your bot > enable View Channel, then hit Reload servers.", "wn", true);
       updateTarget(); return;
     }
     // group under their category, like Discord shows them
@@ -1475,8 +1490,10 @@ async function loadChannels(gid) {
     sels.forEach(s => s.innerHTML = html.join(""));
     log(`Loaded ${text.length} channel(s)`, "ok", true);
   } catch (err) {
-    sels.forEach(s => s.innerHTML = '<option value="">failed to load</option>');
+    sels.forEach(s => s.innerHTML = '<option value="">failed — see Activity</option>');
     log("Load channels failed: " + err.message, "er");
+    if (/403/.test(err.message))
+      log("The bot lacks View Channel in that server. Fix its role permissions and reload.", "wn", true);
   }
   updateTarget();
 }
@@ -1505,6 +1522,7 @@ function updateTarget() {
 
 $("btnConnect").onclick = connect;
 $("btnRefresh").onclick = loadGuilds;
+$("btnReloadCh").onclick = () => loadChannels($("guild").value);
 $("btnShow").onclick = () => {
   const i = $("token"), show = i.type === "password";
   i.type = show ? "text" : "password";
@@ -2922,5 +2940,5 @@ drawFields(); syncMode(); drawPacks(); drawResponders(); drawSpark(); drawThread
 document.querySelector('.pres[data-st="online"]').classList.add("on"); applyPresence(); updateTarget(); setLocked(true);
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b62a9fe8e99894',t:'MTc4Njc3NTU5Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b653edbab0651c',t:'MTc4Njc3NzI4NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
