@@ -380,6 +380,39 @@ code{font-family:var(--mono);background:rgba(255,255,255,.09);padding:2px 6px;
 .fe .ago{font-size:11px;color:var(--dim);font-family:var(--mono);flex:none}
 
 
+
+/* ═══════════════ AUTH & INVITE ═══════════════ */
+.oa-user{display:flex;align-items:center;gap:13px;padding:13px;border-radius:12px;margin-bottom:14px;
+  background:linear-gradient(120deg,rgba(88,101,242,.16),rgba(88,101,242,.04));
+  border:1px solid rgba(88,101,242,.35);animation:up .45s var(--ease) both}
+.oa-user img{width:44px;height:44px;border-radius:50%;flex:none;background:#1a1a20;
+  box-shadow:0 0 0 2px rgba(88,101,242,.5)}
+.oa-name{font-weight:750;font-size:15px}
+.oa-id{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:2px}
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:7px;margin:12px 0}
+.pm{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;font-size:12px;
+  background:var(--glass2);border:1px solid var(--line);cursor:pointer;transition:.18s;user-select:none}
+.pm:hover{border-color:var(--line2);background:rgba(255,255,255,.08)}
+.pm input{width:14px;height:14px;accent-color:#5865f2;cursor:pointer;margin:0;flex:none}
+.pm.dis{opacity:.45;pointer-events:none}
+.inv-out{background:rgba(0,0,0,.5);border:1px solid var(--line);border-radius:10px;
+  padding:11px 13px;margin-top:4px;overflow-x:auto}
+.inv-out code{font-family:var(--mono);font-size:11.5px;color:var(--info);white-space:nowrap;
+  background:none;border:none;padding:0}
+.srv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:9px}
+.srv{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:11px;
+  background:var(--glass2);border:1px solid var(--line);transition:.2s var(--ease)}
+.srv:hover{border-color:var(--line2);transform:translateY(-2px);background:rgba(255,255,255,.08)}
+.srv-ic{width:34px;height:34px;border-radius:11px;flex:none;background:#5865f2;color:#fff;
+  display:grid;place-items:center;font-size:12.5px;font-weight:800;overflow:hidden}
+.srv-ic img{width:100%;height:100%;object-fit:cover}
+.srv-n{font-size:12.5px;font-weight:650;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;min-width:0;flex:1}
+.srv-add{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;flex:none;
+  background:#5865f2;color:#fff;border:none;transition:.16s}
+.srv-add:hover{background:#4752c4}
+.srv-in{font-size:10px;font-weight:800;color:var(--ok);letter-spacing:.05em;flex:none}
+
 /* ═══════════════ DM INBOX ═══════════════ */
 .tab-badge{display:none;margin-left:7px;min-width:17px;height:17px;padding:0 5px;border-radius:9px;
   background:#f23f43;color:#fff;font-size:10.5px;font-weight:800;line-height:17px;
@@ -647,6 +680,7 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
   <nav class="tabs rise" style="animation-delay:.06s">
     <div id="glider"></div>
     <button class="tab active" data-tab="connect">Connect</button>
+    <button class="tab" data-tab="auth">Auth &amp; Invite</button>
     <button class="tab" data-tab="ctrl" disabled>Control</button>
     <button class="tab" data-tab="dm" disabled>Inbox<span class="tab-badge" id="dmBadge">0</span></button>
     <button class="tab" data-tab="send" disabled>Send Message</button>
@@ -700,6 +734,85 @@ footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:44px;line-
       <div class="note" style="margin-top:17px">
         Don't see your server? Invite the bot first, then hit <b>Reload servers</b>.
         Only text channels the bot can view are listed.
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ AUTH & INVITE ============ -->
+  <section id="tab-auth" class="hidden">
+
+    <div class="warn">
+      <b>Never put a client secret in this file.</b> Anyone who opens the page could read it.
+      This panel uses <b>PKCE</b> instead &mdash; the same flow your site already uses for Roblox
+      login &mdash; which is the correct way to do OAuth from a browser and needs no secret.
+      If you have pasted your secret anywhere public, reset it in the Developer Portal.
+    </div>
+
+    <div class="card">
+      <h2><svg class="ic lg"><use href="#i-lock"/></svg> Application</h2>
+      <p class="hint">Saved in this browser only. The client ID is public by design.</p>
+      <div class="row">
+        <div class="field"><label for="oaClient">Client ID</label>
+          <input id="oaClient" spellcheck="false" placeholder="1538061542258507786"></div>
+        <div class="field" style="flex:1.5"><label for="oaRedirect">Redirect URL</label>
+          <input id="oaRedirect" spellcheck="false" placeholder="https://oracle-games-bot.vercel.app/"></div>
+      </div>
+      <div class="note" style="margin-top:4px">
+        This exact URL must also be listed under <b>OAuth2 &rarr; Redirects</b> in the
+        Developer Portal, character for character, or Discord returns <code>invalid_redirect_uri</code>.
+      </div>
+    </div>
+
+    <div class="ctl-grid">
+      <!-- login -->
+      <div class="card">
+        <h2><svg class="ic lg"><use href="#i-user"/></svg> Sign in with Discord</h2>
+        <p class="hint">Proves who you are, so the panel can show your servers.</p>
+        <div class="oa-user hidden" id="oaUser">
+          <img id="oaAv" alt=""><div style="min-width:0">
+            <div class="oa-name" id="oaName">—</div>
+            <div class="oa-id" id="oaId">—</div></div>
+          <span class="lockb" style="margin-left:auto">SIGNED IN</span>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnOauth">
+            <svg class="ic" style="width:15px;height:15px;margin-right:7px"><use href="#i-link"/></svg>Authorize</button>
+          <button class="btn ghost" id="btnOauthOut">Sign out</button>
+        </div>
+        <p class="dh-opt" id="oaState" style="margin-top:10px">Not signed in</p>
+      </div>
+
+      <!-- invite -->
+      <div class="card">
+        <h2><svg class="ic lg"><use href="#i-plus"/></svg> Invite Bot to a Server</h2>
+        <p class="hint">Builds the official OAuth2 invite link from the permissions you tick.</p>
+        <div class="field">
+          <label for="invPreset">Permission preset</label>
+          <select id="invPreset">
+            <option value="admin">Administrator — everything</option>
+            <option value="mod" selected>Moderator — matches the command packs</option>
+            <option value="basic">Basic — send messages and slash commands</option>
+            <option value="custom">Custom — tick your own below</option>
+          </select>
+        </div>
+        <div class="perm-grid" id="permGrid"></div>
+        <div class="inv-out">
+          <code id="invUrl">—</code>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnInvOpen">Open invite</button>
+          <button class="btn ghost" id="btnInvCopy">Copy link</button>
+          <span class="dh-opt" id="invBits">permissions 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><svg class="ic lg"><use href="#i-server"/></svg> Your Servers</h2>
+      <p class="hint">From your signed-in account — shows where you can actually add the bot.</p>
+      <div class="srv-grid" id="srvGrid">
+        <div class="empty">Sign in with Discord to list your servers.</div>
       </div>
     </div>
   </section>
@@ -1164,7 +1277,7 @@ tabs.forEach(btn => btn.onclick = () => {
   tabs.forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   moveGlider(btn);
-  ["connect","ctrl","dm","send","cmds","log"].forEach(t => {
+  ["connect","auth","ctrl","dm","send","cmds","log"].forEach(t => {
     const s = $("tab-" + t), on = t === btn.dataset.tab;
     s.classList.toggle("hidden", !on);
     if (on) [...s.children].forEach((c, i) => {
@@ -2358,6 +2471,240 @@ $("btnDmOn").onclick = () => {
   if (wantOnline) reconnect(false);   // fresh identify with the new intents
 };
 
+
+/* ═══════════════════════════════════════════════════════════
+   DISCORD OAUTH2 — PKCE (no client secret, browser-safe)
+   ═══════════════════════════════════════════════════════════ */
+const OA_KEY = "og_oauth", OA_CFG = "og_oauth_cfg";
+let oaUser = null, oaToken = null;
+
+const DEFAULT_CLIENT = "1538061542258507786";
+const DEFAULT_REDIRECT = "https://oracle-games-bot.vercel.app/";
+
+/* permission bits — verified against Discord's docs */
+const PERMS = [
+  ["Administrator",      1n << 3n],
+  ["Manage Server",      1n << 5n],
+  ["Manage Roles",       1n << 28n],
+  ["Manage Channels",    1n << 4n],
+  ["Kick Members",       1n << 1n],
+  ["Ban Members",        1n << 2n],
+  ["Timeout Members",    1n << 40n],
+  ["Manage Nicknames",   1n << 27n],
+  ["Manage Messages",    1n << 13n],
+  ["Read Messages",      1n << 10n],
+  ["Send Messages",      1n << 11n],
+  ["Embed Links",        1n << 14n],
+  ["Attach Files",       1n << 15n],
+  ["Read History",       1n << 16n],
+  ["Add Reactions",      1n << 6n],
+  ["Mention Everyone",   1n << 17n],
+  ["Manage Webhooks",    1n << 29n],
+  ["View Audit Log",     1n << 7n]
+];
+const PRESETS = {
+  admin: ["Administrator"],
+  mod:   ["Kick Members","Ban Members","Timeout Members","Manage Messages","Manage Roles",
+          "Manage Channels","Manage Nicknames","Read Messages","Send Messages","Embed Links",
+          "Attach Files","Read History","Add Reactions","View Audit Log"],
+  basic: ["Read Messages","Send Messages","Embed Links","Attach Files","Read History","Add Reactions"]
+};
+
+const oaCfg = () => ({
+  client: ($("oaClient").value || "").trim() || DEFAULT_CLIENT,
+  redirect: ($("oaRedirect").value || "").trim() || DEFAULT_REDIRECT
+});
+function saveCfg() { try { localStorage.setItem(OA_CFG, JSON.stringify(oaCfg())); } catch {} }
+
+/* ---- PKCE helpers ---- */
+function randStr(n = 64) {
+  const a = new Uint8Array(n); crypto.getRandomValues(a);
+  return btoa(String.fromCharCode(...a)).replace(/[^a-zA-Z0-9]/g, "").slice(0, n);
+}
+async function challenge(verifier) {
+  const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+  return btoa(String.fromCharCode(...new Uint8Array(d)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/* ---- start login ---- */
+$("btnOauth").onclick = async () => {
+  const { client, redirect } = oaCfg();
+  if (!client) { log("Enter your Client ID first.", "er"); return; }
+  saveCfg();
+  const verifier = randStr(), state = randStr(24);
+  sessionStorage.setItem("og_pkce", verifier);
+  sessionStorage.setItem("og_state", state);
+  const u = new URL("https://discord.com/oauth2/authorize");
+  u.searchParams.set("client_id", client);
+  u.searchParams.set("redirect_uri", redirect);
+  u.searchParams.set("response_type", "code");
+  u.searchParams.set("scope", "identify guilds");
+  u.searchParams.set("state", state);
+  u.searchParams.set("code_challenge", await challenge(verifier));
+  u.searchParams.set("code_challenge_method", "S256");
+  log("Redirecting to Discord…", "in");
+  location.href = u.toString();
+};
+
+/* ---- finish login on return ---- */
+async function completeOauth() {
+  const q = new URLSearchParams(location.search);
+  const code = q.get("code"), st = q.get("state"), err = q.get("error");
+  if (err) { log("Discord returned: " + err + (q.get("error_description") ? " — " + q.get("error_description") : ""), "er");
+             history.replaceState({}, "", location.pathname); return; }
+  if (!code) return;
+  if (st !== sessionStorage.getItem("og_state")) {
+    log("OAuth state mismatch — ignoring this response.", "er");
+    history.replaceState({}, "", location.pathname); return;
+  }
+  const verifier = sessionStorage.getItem("og_pkce");
+  const { client, redirect } = oaCfg();
+  history.replaceState({}, "", location.pathname);
+  try {
+    const body = new URLSearchParams({
+      client_id: client, grant_type: "authorization_code",
+      code, redirect_uri: redirect, code_verifier: verifier
+    });
+    const r = await fetch(API + "/oauth2/token", { method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error_description || j.error || r.status);
+    oaToken = j.access_token;
+    try { localStorage.setItem(OA_KEY, oaToken); } catch {}
+    await loadOaUser();
+    log("Signed in with Discord.", "ok");
+  } catch (e) {
+    log("OAuth token exchange failed: " + e.message, "er");
+    if (/invalid_client/i.test(e.message))
+      log("Your app may require a secret — in the Portal set the OAuth2 client type to Public.", "wn", true);
+  }
+}
+
+async function oaFetch(path) {
+  const r = await fetch(API + path, { headers: { Authorization: "Bearer " + oaToken } });
+  if (!r.ok) throw new Error(r.status === 401 ? "session expired" : "HTTP " + r.status);
+  return r.json();
+}
+
+async function loadOaUser() {
+  if (!oaToken) return;
+  try {
+    oaUser = await oaFetch("/users/@me");
+    $("oaAv").src = oaUser.avatar
+      ? `https://cdn.discordapp.com/avatars/${oaUser.id}/${oaUser.avatar}.png?size=96`
+      : "https://cdn.discordapp.com/embed/avatars/0.png";
+    $("oaName").textContent = oaUser.global_name || oaUser.username;
+    $("oaId").textContent = "ID " + oaUser.id;
+    $("oaUser").classList.remove("hidden");
+    $("oaState").textContent = "Signed in as " + oaUser.username;
+    loadOaGuilds();
+  } catch (e) {
+    oaToken = null; localStorage.removeItem(OA_KEY);
+    $("oaState").textContent = "Session expired — sign in again";
+    log("OAuth session: " + e.message, "wn");
+  }
+}
+
+async function loadOaGuilds() {
+  const box = $("srvGrid");
+  box.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const gs = await oaFetch("/users/@me/guilds");
+    const MANAGE = 1n << 5n, ADMIN = 1n << 3n;
+    const mine = gs.filter(g => { const pp = BigInt(g.permissions || 0);
+      return g.owner || (pp & MANAGE) === MANAGE || (pp & ADMIN) === ADMIN; });
+    if (!mine.length) { box.innerHTML = '<div class="empty">No servers where you can add a bot.</div>'; return; }
+    box.innerHTML = "";
+    mine.forEach(g => {
+      const d = document.createElement("div"); d.className = "srv";
+      const ic = g.icon ? `<img src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64" alt="">`
+                        : g.name.slice(0, 2).toUpperCase();
+      d.innerHTML = `<div class="srv-ic">${ic}</div><span class="srv-n"></span>`;
+      d.querySelector(".srv-n").textContent = g.name;
+      const b = document.createElement("button");
+      b.className = "srv-add"; b.textContent = "Add bot";
+      b.onclick = () => window.open(inviteUrl(g.id), "_blank", "noopener");
+      d.appendChild(b);
+      box.appendChild(d);
+    });
+    log(`Found ${mine.length} server(s) you manage.`, "ok", true);
+  } catch (e) { box.innerHTML = '<div class="empty">Could not load servers.</div>';
+                log("Guild list failed: " + e.message, "er"); }
+}
+
+$("btnOauthOut").onclick = () => {
+  oaToken = null; oaUser = null;
+  localStorage.removeItem(OA_KEY);
+  $("oaUser").classList.add("hidden");
+  $("oaState").textContent = "Not signed in";
+  $("srvGrid").innerHTML = '<div class="empty">Sign in with Discord to list your servers.</div>';
+  log("Signed out of Discord.", "wn");
+};
+
+/* ---- invite builder ---- */
+function drawPerms() {
+  const box = $("permGrid"); box.innerHTML = "";
+  PERMS.forEach(([name]) => {
+    const l = document.createElement("label");
+    l.className = "pm";
+    l.innerHTML = `<input type="checkbox" data-p="${name}"><span></span>`;
+    l.querySelector("span").textContent = name;
+    l.querySelector("input").onchange = () => { $("invPreset").value = "custom"; paintInvite(); };
+    box.appendChild(l);
+  });
+}
+function applyPreset() {
+  const p = $("invPreset").value;
+  const set = new Set(PRESETS[p] || []);
+  document.querySelectorAll("#permGrid input").forEach(i => {
+    if (p !== "custom") i.checked = set.has(i.dataset.p);
+  });
+  document.querySelectorAll("#permGrid .pm").forEach(l => l.classList.toggle("dis", p === "admin"));
+  paintInvite();
+}
+function permBits() {
+  let bits = 0n;
+  document.querySelectorAll("#permGrid input:checked").forEach(i => {
+    const e = PERMS.find(x => x[0] === i.dataset.p); if (e) bits |= e[1];
+  });
+  return bits;
+}
+function inviteUrl(guildId) {
+  const { client } = oaCfg();
+  const u = new URL("https://discord.com/oauth2/authorize");
+  u.searchParams.set("client_id", client);
+  u.searchParams.set("scope", "bot applications.commands");
+  u.searchParams.set("permissions", permBits().toString());
+  if (guildId) { u.searchParams.set("guild_id", guildId); u.searchParams.set("disable_guild_select", "true"); }
+  return u.toString();
+}
+function paintInvite() {
+  const url = inviteUrl();
+  $("invUrl").textContent = url;
+  $("invBits").textContent = "permissions " + permBits().toString();
+}
+$("invPreset").onchange = applyPreset;
+$("btnInvOpen").onclick = () => window.open(inviteUrl(), "_blank", "noopener");
+$("btnInvCopy").onclick = async () => {
+  try { await navigator.clipboard.writeText(inviteUrl()); log("Invite link copied.", "ok"); }
+  catch { log("Clipboard blocked — select the link and copy it.", "wn"); }
+};
+$("oaClient").oninput = () => { saveCfg(); paintInvite(); };
+$("oaRedirect").oninput = saveCfg;
+
+/* ---- boot auth ---- */
+(function initAuth() {
+  let cfg = {};
+  try { cfg = JSON.parse(localStorage.getItem(OA_CFG) || "{}"); } catch {}
+  $("oaClient").value = cfg.client || DEFAULT_CLIENT;
+  $("oaRedirect").value = cfg.redirect || DEFAULT_REDIRECT;
+  drawPerms(); applyPreset();
+  oaToken = localStorage.getItem(OA_KEY);
+  if (oaToken) loadOaUser();
+  completeOauth();
+})();
+
 /* ---------- boot ---------- */
 requestAnimationFrame(() => moveGlider(document.querySelector(".tab.active")));
 const saved = localStorage.getItem(KEY);
@@ -2367,5 +2714,5 @@ drawFields(); syncMode(); drawPacks(); drawResponders(); drawSpark(); drawThread
 document.querySelector('.pres[data-st="online"]').classList.add("on"); applyPresence(); updateTarget(); setLocked(true);
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b60973fdcd435a',t:'MTc4Njc3NDIzNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2b6189ec9e30b1c',t:'MTc4Njc3NDg1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
